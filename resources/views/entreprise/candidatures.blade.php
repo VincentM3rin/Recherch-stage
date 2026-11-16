@@ -38,9 +38,9 @@
                             </td>
                             <td style="padding: 10px; border: 1px solid #ddd;">
                                 @if($candidature->cvEtudiant)
-                                    <a href="{{ asset('storage/' . $candidature->cvEtudiant) }}" target="_blank"
-                                       style="padding: 5px 10px; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 0.9em;">
-                                        Voir le CV
+                                    <a href="{{ route('entreprise.candidatures.cv', $candidature->idCandidature) }}" target="_blank"
+                                    style="padding: 5px 10px; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 0.9em;">
+                                    Voir le CV
                                     </a>
                                 @else
                                     Non fourni

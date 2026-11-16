@@ -6,6 +6,7 @@ use App\Models\Candidature;
 use App\Models\Point;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EntrepriseController extends Controller
 {
@@ -96,4 +97,24 @@ class EntrepriseController extends Controller
 
         return view('entreprise.candidatures', compact('entreprise', 'candidatures'));
     }
+    public function voirCv($idCandidature)
+{
+    if ($redirect = $this->verifierEntreprise()) {
+        return $redirect;
+    }
+
+    $entreprise = Auth::user()->entreprise;
+
+    // Vérifie que la candidature appartient bien à l'entreprise connectée
+    $candidature = Candidature::where('idCandidature', $idCandidature)
+        ->where('idEntreprise', $entreprise->idEntreprise)
+        ->firstOrFail();
+
+    if (!$candidature->cvEtudiant || !Storage::disk('public')->exists($candidature->cvEtudiant)) {
+        abort(404, 'Le fichier CV est introuvable.');
+    }
+
+    // Ouvre le PDF directement dans le navigateur
+    return response()->file(Storage::disk('public')->path($candidature->cvEtudiant));
+}
 }

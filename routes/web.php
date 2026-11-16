@@ -5,6 +5,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\EntrepriseAuthController;
 use App\Http\Controllers\EtudiantAuthController;
 use App\Http\Controllers\EntrepriseController;
+use App\Http\Controllers\EtudiantController;
 
 
 Route::get('/', [PageController::class, 'accueil'])->name('accueil');
@@ -30,8 +31,8 @@ Route::prefix('entreprise')->group(function () {
     Route::post('/carte', [EntrepriseController::class, 'storePoint'])->name('entreprise.carte.store');
     Route::delete('/carte/{idPoint}', [EntrepriseController::class, 'destroyPoint'])->name('entreprise.carte.destroy');
     Route::get('/candidatures', [EntrepriseController::class, 'listCandidatures'])->name('entreprise.candidatures');
+    Route::get('/candidatures/{idCandidature}/cv', [EntrepriseController::class, 'voirCv'])->name('entreprise.candidatures.cv');
 });
-
 
 // ==========================================
 // ROUTES ÉTUDIANT
@@ -43,6 +44,10 @@ Route::post('/etudiant/connexion', [EtudiantAuthController::class, 'login'])->na
 // Inscription
 Route::get('/etudiant/inscription', [EtudiantAuthController::class, 'showRegisterForm'])->name('etudiant.inscription');
 Route::post('/etudiant/inscription', [EtudiantAuthController::class, 'register'])->name('etudiant.register');
+
+// Candidature à un stage (étudiant uniquement)
+Route::get('/etudiant/postuler/{idEntreprise}', [EtudiantController::class, 'showPostulerForm'])->name('etudiant.postuler.form');
+Route::post('/etudiant/postuler/{idEntreprise}', [EtudiantController::class, 'storeCandidature'])->name('etudiant.postuler.store');
 
 // Dashboard Étudiant
 Route::get('/etudiant/dashboard', function () {
